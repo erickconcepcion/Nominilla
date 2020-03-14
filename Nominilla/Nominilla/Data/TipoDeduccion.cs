@@ -16,9 +16,16 @@ namespace Nominilla.Data
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
+        [Required]
+        [StringLength(100, MinimumLength = 2)]
         public string Nombre { get; set; }
+
+
+        [Range(0.01, 100)]
         public decimal? PorcentajeSalario { get; set; }
         public bool Estado { get; set; }
+
+        [Range(0, double.MaxValue)]
         public decimal? MontoFijo { get; set; }
 
         public ICollection<RegistroTransaccion> RegistroTransaccions { get; set; }

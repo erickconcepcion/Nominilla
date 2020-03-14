@@ -18,6 +18,7 @@ namespace Nominilla.Data
         public bool Estado { get; set; }
 
         [Required]
+        [Range(1, double.MaxValue)]
         public decimal Monto { get; set; }
 
         public int EmpleadoId { get; set; }
