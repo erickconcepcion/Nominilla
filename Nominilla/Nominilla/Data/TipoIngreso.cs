@@ -20,10 +20,16 @@ namespace Nominilla.Data
         [Required]
         [StringLength(100, MinimumLength =2)]
         public string Nombre { get; set; }
+
+        [Range(0.01, 100)]
+        [Display(Name = "Porcentaje Salario")]
         public decimal? PorcentajeSalario { get; set; }
         public bool Estado { get; set; }
+
+        [Display(Name = "Monto Fijo")]
         public decimal? MontoFijo { get; set; }
 
+        [Display(Name = "Registro de Transacciones")]
         public ICollection<RegistroTransaccion> RegistroTransaccions { get; set; }
     }
 
