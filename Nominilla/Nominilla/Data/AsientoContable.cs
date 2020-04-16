@@ -17,9 +17,15 @@ namespace Nominilla.Data
         [StringLength(100, MinimumLength = 2)]
         public string Descripcion { get; set; }
 
-        public string Cuenta { get; set; } = "4";
+        public string Cuenta { get; set; }
 
-        public bool IsCredit { get; set; }
+        public int IdEntradaContable { get; set; }
+
+        public bool IsCredit { get; set; } = false;
+
+        [Required]
+        [Range(1, double.MaxValue)]
+        public decimal Monto { get; set; } = 1;
 
         public DateTime FechaAsiento { get; set; }
         public bool Estado { get; set; }

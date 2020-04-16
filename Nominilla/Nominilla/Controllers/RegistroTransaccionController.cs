@@ -60,18 +60,42 @@ namespace Nominilla.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Fecha,Estado,Monto,EmpleadoId,TipoIngresoId,TipoDeduccionId")] RegistroTransaccion registroTransaccion)
+        public async Task<IActionResult> Create([Bind("Id,Fecha,Estado,EmpleadoId,TipoIngresoId,TipoDeduccionId")] RegistroTransaccion registroTransaccion)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(registroTransaccion);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (registroTransaccion.TipoDeduccionId.HasValue || registroTransaccion.TipoIngresoId.HasValue)
+                {
+                    GetMonto(registroTransaccion);
+                    _context.Add(registroTransaccion);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                ModelState.AddModelError("", "Elija un tipo para proceder");
             }
             ViewData["EmpleadoId"] = new SelectList(_context.Empleados, "Id", "Cedula", registroTransaccion.EmpleadoId);
             ViewData["TipoDeduccionId"] = new SelectList(_context.TipoDeduccions, "Id", "Nombre", registroTransaccion.TipoDeduccionId);
             ViewData["TipoIngresoId"] = new SelectList(_context.TipoIngresos, "Id", "Nombre", registroTransaccion.TipoIngresoId);
             return View(registroTransaccion);
+        }
+        private void GetMonto(RegistroTransaccion trans)
+        {
+            var employee = _context.Empleados.Where(e => e.Id == trans.EmpleadoId)
+                .FirstOrDefault();
+            if (trans.TipoIngresoId != null)
+            {
+                var ingreso = _context.TipoIngresos.Where(ti => ti.Id == trans.TipoIngresoId).FirstOrDefault();
+                trans.Monto = !ingreso.MontoFijo.HasValue ? 
+                    (ingreso.PorcentajeSalario.Value / 100) * employee.SalarioMensual 
+                    : ingreso.MontoFijo.Value;
+            }
+            else if (trans.TipoDeduccionId != null)
+            {
+                var deduccion = _context.TipoDeduccions.Where(ti => ti.Id == trans.TipoDeduccionId).FirstOrDefault();
+                trans.Monto = !deduccion.MontoFijo.HasValue ?
+                    (deduccion.PorcentajeSalario.Value / 100) * employee.SalarioMensual
+                    : deduccion.MontoFijo.Value;
+            }
         }
 
         // GET: RegistroTransaccion/Edit/5

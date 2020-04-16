@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Nominilla.Data;
+using Nominilla.Services;
 
 namespace Nominilla
 {
@@ -26,6 +27,7 @@ namespace Nominilla
         {
             services.AddControllersWithViews();
             services.AddDbContext<ApplicationDbContext>();
+            services.AddScoped<IAsientoService, AsientoService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -11,7 +11,7 @@ namespace Nominilla.Data
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(
-                @"Server=(localdb)\mssqllocaldb;Database=Nominilla;Integrated Security=True");
+                "Server=tcp:nominilla.database.windows.net,1433;Initial Catalog=nominilladb;Persist Security Info=False;User ID=nominilla;Password=Abcd.1234;MultipleActiveResultSets=true;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
         }
         public DbSet<Empleado> Empleados { get; set; }
         public DbSet<TipoDeduccion> TipoDeduccions { get; set; }

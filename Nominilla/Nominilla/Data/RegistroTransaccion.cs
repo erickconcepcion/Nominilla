@@ -19,15 +19,15 @@ namespace Nominilla.Data
 
         [Required]
         [Range(1, double.MaxValue)]
-        public decimal Monto { get; set; }
+        public decimal Monto { get; set; } = 1;
 
         public int EmpleadoId { get; set; }
         public Empleado Empleado { get; set; }
 
-        public int TipoIngresoId { get; set; }
+        public int? TipoIngresoId { get; set; }
         public TipoIngreso TipoIngreso { get; set; }
 
-        public int TipoDeduccionId { get; set; }
+        public int? TipoDeduccionId { get; set; }
         public TipoDeduccion TipoDeduccion { get; set; }
     }
 }

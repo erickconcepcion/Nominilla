@@ -6,16 +6,20 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Nominilla.Data;
+using Nominilla.Services;
 
 namespace Nominilla.Controllers
 {
     public class AsientoContableController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IAsientoService _asientoService;
 
-        public AsientoContableController(ApplicationDbContext context)
+        public AsientoContableController(ApplicationDbContext context, 
+            IAsientoService asientoService)
         {
             _context = context;
+            _asientoService = asientoService;
         }
 
         // GET: AsientoContable
@@ -60,9 +64,11 @@ namespace Nominilla.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(asientoContable);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (await _asientoService.Create(asientoContable))
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                ModelState.AddModelError("", "No se encontraron registros de transaccion en la fecha seleccionada para el asiento");
             }
             ViewData["EmpleadoId"] = new SelectList(_context.Empleados, "Id", "Cedula", asientoContable.EmpleadoId);
             return View(asientoContable);

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Nominilla.Data;
 
 namespace Nominilla.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200416035711_amount")]
+    partial class amount
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -42,9 +44,6 @@ namespace Nominilla.Migrations
 
                     b.Property<DateTime>("FechaAsiento")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("IdEntradaContable")
-                        .HasColumnType("int");
 
                     b.Property<bool>("IsCredit")
                         .HasColumnType("bit");
